@@ -9,6 +9,7 @@ export class GitHubService {
     public apiUrl_test="http://91.202.171.239/MunicipalWCF/App10GuiService.svc/";
     //public apiUrl="http://91.202.171.239/MunicipalWCF/App10GuiService.svc/";
     //public apiUrl="http://localhost:56334/App10GuiService.svc/";
+    //jamal
 
     
 
