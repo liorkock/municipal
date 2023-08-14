@@ -1,0 +1,59 @@
+<ion-content padding  [ngClass]="{'homeRTL': mylang.currentLang=='Heb','home': mylang.currentLang!='Heb'}"  >
+
+  <ion-grid>
+    <ion-row>
+      <ion-col ><img  src="assets/img/EcoWaste_Logo.jpg"></ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  
+  <ion-grid>
+  
+    <ion-row>
+      <ion-col ><button  class="homediv" (click)="goToContainers($event)" ><img width="88" height="69" src="assets/img/containers_2x.png"><br>{{mylang.HomePage.containers}}</button></ion-col>
+      <ion-col  *ngIf="userRole!='AdminStricted' && isRestrictedDriver!='true'"><button  class="homediv" (click)="goToProjects($event)" ><img width="88"  height="69" src="assets/img/projects_2x.png"><br>{{mylang.HomePage.projects}}</button></ion-col>    
+    </ion-row>
+     
+  
+    <ion-row  *ngIf="userRole!='AdminStricted' && isRestrictedDriver!='true'">    
+      <ion-col ><button class="homediv" (click)="goToContainerTracking($event)" ><img width="88" height="69" src="assets/img/tracking_2x.png"><br>{{mylang.HomePage.containerUnloading}}</button></ion-col>
+      <ion-col ><button  class="homediv" (click)="goToDischargeControl($event)" ><img width="88"  height="69" src="assets/img/discharge_2x.png"><br>{{mylang.HomePage.imeiUnloadingData}}</button></ion-col>    
+    </ion-row>
+  
+    <ion-row  *ngIf="userRole!='Inspector' && userRole!='AdminStricted' && isRestrictedDriver!='true'">    
+      <ion-col ><button class="homediv" (click)="goToOrderList($event)" ><img width="88" height="69" src="assets/img/orders_03_2x.png"><br>{{mylang.HomePage.orders}}</button></ion-col>
+      <ion-col ></ion-col>
+     <!-- <ion-col ><button class="homediv" (click)="goToSupplierOrderList($event)" ><img width="88" height="69" src="assets/img/supplierOrder2.png"><br>{{mylang.HomePage.supplierOrders}}</button></ion-col>    -->
+    </ion-row>
+  
+  
+  </ion-grid>
+  
+  {{errmsg}}
+  </ion-content>
+  
+  
+  
+  <ion-footer [ngClass]="{'homeRTL': mylang.currentLang=='Heb','home': mylang.currentLang!='Heb'}">
+    <ion-toolbar>
+  
+    <ion-row>
+      
+      <ion-col *ngIf="mylang.currentLang=='Heb'"> 
+        <button category="bar-button" class="homefooter" (click)="goToAlertsPage($event)" ><img width="38" height="38" src="assets/img/alerts.png"><br>{{mylang.HomePage.Alert}}</button>
+        <ion-badge color="danger"  item-right style="right: calc(50% - 50px); right: 8%;   position: absolute;top: 6%;">{{totalAlarms}}</ion-badge>    
+      </ion-col>
+  
+      <ion-col *ngIf="mylang.currentLang!='Heb'"> 
+        <ion-badge color="danger"  item-right style="left: calc(50% - 50px); left: 8%;   position: absolute;top: 6%;">{{totalAlarms}}</ion-badge>    
+        <button category="bar-button" class="homefooter" (click)="goToAlertsPage($event)" ><img width="38" height="38" src="assets/img/alerts.png"><br>{{mylang.HomePage.Alert}}</button>
+        
+      </ion-col>
+  
+      <ion-col><button class="homefooter" (click)="goToInfoPage($event)" ><img width="38"  height="38" src="assets/img/about.png"><br>{{mylang.HomePage.infoPage}}</button></ion-col>    
+      <ion-col><button class="homefooter" (click)="goToLogout($event)" ><img width="38"  height="38" src="assets/img/logout.png"><br>{{mylang.HomePage.logout}}</button></ion-col>
+    </ion-row>
+  
+      
+    </ion-toolbar>
+  </ion-footer>

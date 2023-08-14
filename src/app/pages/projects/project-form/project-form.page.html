@@ -1,0 +1,289 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+          {{mylang.Project.form}}
+      </ion-title>
+      
+      <ion-buttons slot="start">
+        <ion-button (click)="cancel($event)"> {{mylang.General.cancel}}</ion-button>
+      </ion-buttons>
+  
+      <ion-buttons slot="end"  *ngIf="showMCsFlag==false">
+        <ion-button color="secondary"  (click)="save($event)"> <img width="24" height="24"
+            src="assets/img/saveIcon.png" style="margin-right:6px;margin-left:5px"> {{mylang.General.save}}</ion-button>
+      </ion-buttons>
+  
+    </ion-toolbar>
+  </ion-header>
+
+
+  
+
+<ion-content padding [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+    <ion-list *ngIf="showMCsFlag==false&&showAuthorityFlag==false" >
+      
+     <ion-item *ngIf=" (userRole=='Admin'||userRole=='Inspector')" >    
+        <ion-label color="primary">{{mylang.Project.movingCompanyName}}<b *ngIf="(DB.movingCompanyTz=='0'||DB.movingCompanyTz=='')&& module!='SupplierOrder'" color="danger" required>*</b></ion-label>
+        <ion-input type="text"    [(ngModel)]="DB.movingCompanyName" readonly="true"></ion-input>
+         <ion-button expand="outline"  item-right (click)="showMCsList($event)">{{mylang.General.select}}</ion-button>  
+      </ion-item>
+
+      
+    
+     <!-- <ion-item *ngIf="DB.projectId >0  && (userRole=='Admin'||userRole=='Inspector')" >
+        <ion-label color="primary">{{mylang.Project.movingCompanyTz}}</ion-label>
+        <ion-input type="text"   readonly="true" [(ngModel)]="DB.movingCompanyTz"></ion-input>
+      </ion-item>
+    
+      <ion-item *ngIf="DB.projectId >0  && (userRole=='Admin'||userRole=='Inspector')" >
+        <ion-label color="primary">{{mylang.Project.movingCompanyName}}</ion-label>
+        <ion-input type="text" readonly="true" [(ngModel)]="DB.movingCompanyName"></ion-input>
+      </ion-item>
+    -->
+   
+    <ion-item *ngIf=" userRole != 'Inspector' && !(userRole == 'MovingCompany' && DB.createdByAuthority==true)" >    
+      <ion-label color="primary">{{mylang.Authority.moduleName}}<b *ngIf="DB.movingCompanyTz=='0'||DB.movingCompanyTz==''" color="danger" required>*</b></ion-label>
+      <ion-input type="text"    [(ngModel)]="authorityName" readonly="true"></ion-input>
+       <ion-button expand="outline"  item-right (click)="showAuthorityList($event)">{{mylang.General.select}}</ion-button>  
+    </ion-item>
+
+    <ion-item *ngIf=" userRole == 'MovingCompany' && ( DB.createdByAuthority==true)" >    
+      <ion-label color="primary">{{mylang.Authority.moduleName}}<b *ngIf="DB.movingCompanyTz=='0'||DB.movingCompanyTz==''" color="danger" required>*</b></ion-label>
+      <ion-input type="text"    [(ngModel)]="DB.creatorAuthoriyName" readonly="true"></ion-input>
+         
+    </ion-item>
+
+   
+
+
+      <ion-item-divider color="light">{{mylang.Project.clientInfo}}</ion-item-divider>
+    
+      <ion-item  *ngIf="userRole == 'Inspector' || DB.isMovingCompanyClient==false">
+        <ion-label color="primary">{{mylang.Project.clientName}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.clientName" readonly="true"></ion-input>
+        
+      </ion-item>
+    
+      <ion-item *ngIf="userRole != 'Inspector' && DB.isMovingCompanyClient==true">
+        <ion-label color="primary">{{mylang.Project.clientName}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.clientName" readonly="true"></ion-input>
+        <ion-button expand="outline"   (click)="showClientList($event)"  *ngIf="DB.movingCompanyTz!='0' && module!='SupplierOrder'" >{{mylang.General.select}}</ion-button>  
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.clientTz}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.clientTz" readonly="true"></ion-input>
+      </ion-item>
+    
+    
+    
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.clientPhone}}</ion-label>
+        <ion-input type="tel"  [(ngModel)]="DB.clientPhone" readonly="true"></ion-input>
+      </ion-item>
+    
+    <ion-item>
+        <ion-label color="primary">{{mylang.Project.clientAddress}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.clientAddress" readonly="true"></ion-input>
+      </ion-item>
+    
+    
+      <ion-item-divider color="light">{{mylang.Project.projectInfo}}</ion-item-divider>
+    
+    <ion-item>
+        <ion-label color="primary">{{mylang.Project.projectName}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.projectName"></ion-input>
+      </ion-item>
+    
+    
+    <ion-item>
+      <ion-label color="primary">{{mylang.Project.autoInsertTypeId}}</ion-label>
+      <ion-select [(ngModel)]="DB.autoInsertTypeId"    [compareWith]="compareWith" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}} >
+        <ion-select-option value="1" selected="true">{{mylang.Project.autoInsertTypeIdOp1}}</ion-select-option>
+        <ion-select-option value="2" selected="false">{{mylang.Project.autoInsertTypeIdOp2}}</ion-select-option>  
+        <ion-select-option value="3" selected="false">{{mylang.Project.autoInsertTypeIdOp3}}</ion-select-option>  
+      </ion-select>
+    </ion-item>
+    
+    
+    
+    
+    
+    <ion-item  *ngIf="mylang.currentLang!='Heb'" >
+      <ion-label color="primary">{{mylang.Project.postalCode}}</ion-label>
+      <ion-input  [(ngModel)]="DB.postalCode"  readonly="true"></ion-input>
+      <ion-button expand="outline"   (click)="selectPostalCode($event)">{{mylang.General.select}}</ion-button>  
+    </ion-item>
+    <ion-item  *ngIf="mylang.currentLang!='Heb'" >
+      <ion-label color="primary">{{mylang.Project.projectTownId}}</ion-label>
+      <ion-input  [(ngModel)]="DB.townDesc"  readonly="true"></ion-input>  
+    </ion-item>
+    
+    
+    
+    
+    <ion-item  *ngIf="mylang.currentLang=='Heb'" >
+      <ion-label color="primary">{{mylang.Project.projectTownId}}<b *ngIf="DB.projectTownId==''" color="danger" required>*</b></ion-label>
+      <ion-input  [(ngModel)]="DB.townDesc"  readonly="true"></ion-input>
+      <ion-button expand="outline"   (click)="selectNewTown($event)">{{mylang.General.select}}</ion-button>  
+    </ion-item>
+    
+    
+    
+     <ion-item >
+        <ion-label color="primary">{{mylang.Project.projectAddress}}<b *ngIf="DB.projectAddress==''" color="danger" required>*</b></ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.projectAddress"></ion-input>
+        <ion-button expand="outline"  (click)="openAddressMap($event)">{{mylang.General.map}}</ion-button>  
+      </ion-item>
+    
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.isActive}}</ion-label>
+        <ion-toggle  [(ngModel)]="DB.isActive"></ion-toggle >
+      </ion-item>
+    
+    
+   <!-- <ion-item>
+      <ion-label color="primary">{{mylang.Project.startDate}}</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="DB.startDate"></ion-datetime>
+    </ion-item>-->
+    <ion-item>
+      <ion-label stacked>{{mylang.Project.startDate}}</ion-label>
+      <ion-input slot="end" style="text-align: end;"  value="{{ DB.startDate | date: 'dd/MM/YYYY' }}" id="date1"></ion-input>
+      <ion-popover trigger="date1" >
+        <ng-template>
+        <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="DB.startDate" ></ion-datetime>
+        </ng-template>
+      </ion-popover>
+    </ion-item>
+
+   <!-- <ion-item>
+      <ion-label color="primary">{{mylang.Project.endDate}}</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="DB.endDate"></ion-datetime>
+    </ion-item>
+    -->
+    <ion-item>
+      <ion-label stacked>{{mylang.Project.endDate}}</ion-label>
+      <ion-input slot="end" style="text-align: end;"  value="{{ DB.endDate | date: 'dd/MM/YYYY' }}" id="date2"></ion-input>
+      <ion-popover trigger="date2" >
+        <ng-template>
+        <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="DB.endDate" ></ion-datetime>
+        </ng-template>
+      </ion-popover>
+    </ion-item>
+    
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.barCode}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.barCode"></ion-input>
+      </ion-item>
+    
+    <ion-item>
+        <ion-label color="primary">{{mylang.Project.buildingApprovalNumber}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.buildingApprovalNumber"></ion-input>
+      </ion-item>
+    
+    <ion-item>
+        <ion-label color="primary">{{mylang.Project.gosh}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.gosh"></ion-input>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.helka}}</ion-label>
+        <ion-input type="text"  [(ngModel)]="DB.helka"></ion-input>
+      </ion-item>
+    
+    <ion-item>
+      <ion-label color="primary">{{mylang.Project.projectType}}</ion-label>
+      <ion-select [(ngModel)]="DB.projectType"    [compareWith]="compareWith" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+        <ion-select-option value="new" selected="true">{{mylang.Project.projectTypeOp1}}</ion-select-option>
+        <ion-select-option value="improvement" selected="false">{{mylang.Project.projectTypeOp2}}</ion-select-option>
+        <ion-select-option value="Infrastructure" selected="false"> {{mylang.Project.projectTypeOp3}}</ion-select-option>
+        <ion-select-option value="destroy" selected="false"> {{mylang.Project.projectTypeOp4}}</ion-select-option>      
+      </ion-select>
+    </ion-item>
+    
+    
+    
+    <ion-item>
+        <ion-label color="primary">{{mylang.Project.remarks}}</ion-label>
+        <ion-textarea type="text"  [(ngModel)]="DB.remarks"></ion-textarea>
+    </ion-item>
+    
+    
+     
+      <ion-item *ngIf="DB.projectId>0">
+        <ion-label color="primary">{{mylang.Project.createdBy}}</ion-label>
+        <ion-input type="text"  readonly="true" [(ngModel)]="DB.createdBy"></ion-input>
+      </ion-item>
+    
+     <ion-item *ngIf="(userRole=='Admin'||userRole=='Inspector')" >
+        <ion-label color="primary">{{mylang.Project.inspectorId}}</ion-label>
+        <ion-select [(ngModel)]="DB.inspectorId"    [compareWith]="compareWith" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+          <ion-select-option *ngFor="let item of AutorityInspectorList" value="{{item.codeId}}">{{item.codeDesc}}</ion-select-option>
+        </ion-select>
+    </ion-item>
+    
+    
+    <ion-item-divider *ngIf="DB.projectId>0" color="light">{{mylang.Order.list}}</ion-item-divider>
+    
+    
+    
+    </ion-list>
+    
+    <ion-list inset   *ngIf="showMCsFlag==false && DB.projectId>0" >
+      <ion-item *ngFor="let item of (orders? orders.slice(0,280): [])" >   
+            <ion-label>  
+        <p><b> {{item.orderNumber}} {{item.statusDesc}}</b></p>	
+        <p> {{item.orderDate}} </p>
+        <p *ngIf="userRole=='Admin'||userRole=='Inspector'" > <img  height="16" width="16" style="height:16px;width:16px" src="assets/img/contractors.png"> {{item.movingCompanyName}}</p>
+        <p><img *ngIf="item.projectAddress!=''"   height="16" width="16" style="height:16px;width:16px" src="assets/img/mapIcons/projectAddressIcon.png"> {{item.projectAddress}}</p>		
+        <p><img *ngIf="item.vehicleNumber!=''"   height="16" width="16" style="height:16px;width:16px" src="assets/img/containers_2x.png">  {{item.vehicleNumber}} </p>
+        <p><img *ngIf="item.clientName!=''"  height="16" width="16" style="height:16px;width:16px" src="assets/img/clients.png">  {{item.clientName}} </p>			
+        <!--<button ion-button outline  item-right (click)="orderItemSelected($event,item)">{{mylang.General.select}}</button> -->           </ion-label>
+      </ion-item>
+    </ion-list>
+  
+
+    <ion-searchbar  *ngIf="showAuthorityFlag==true" debounce='1000' (ionChange)="getMCAuthorityList($event)" [(ngModel)]="myInput_au"  ></ion-searchbar>
+    <ion-list inset  *ngIf="showAuthorityFlag==true">
+      <!--ion-item *ngFor="let item of (mc_items? mc_items.slice(0,220): [])" >    -->
+      <ion-item button detail="false" [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (authority_items? authority_items.slice(0,220): []);let even = even" (click)=" au_itemSelected($event,item)">
+
+     <ion-label>
+      <h2>{{item.authorityName}} </h2>
+      <p>{{item.authorityId}}</p> 
+    </ion-label>
+  </ion-item>
+</ion-list>
+    <ion-searchbar  *ngIf="showMCsFlag==true" debounce='1000' (ionChange)="getMovingCompanyItems($event)" [(ngModel)]="myInput_mc"  ></ion-searchbar>
+      <ion-list inset  *ngIf="showMCsFlag==true">
+        <!--ion-item *ngFor="let item of (mc_items? mc_items.slice(0,220): [])" >    -->
+        <ion-item button detail="false" [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (mc_items? mc_items.slice(0,220): []);let even = even" (click)=" mc_itemSelected($event,item)">
+
+         <!--  <ion-label>
+            <h2>{{item.movingCompanyName}}</h2>
+          </ion-label>
+          <ion-label slot="end">
+          <p >{{item.movingCompanyTz}}</p>   
+          </ion-label>
+-->
+       <ion-label>
+        <h2>{{item.movingCompanyName}} </h2>
+        <p>{{item.movingCompanyTz}}</p>
+        
+      </ion-label>
+     
+         
+          
+          
+        </ion-item>
+      </ion-list>
+    
+    
+    
+     
+    
+     
+    
+    
+    </ion-content>

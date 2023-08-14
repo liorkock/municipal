@@ -1,0 +1,60 @@
+<ion-header  [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+  <ion-toolbar>
+    
+    <ion-title>
+      {{mylang.Client.list}}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="CanelNoSave($event)"> {{mylang.General.cancel}}</ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start" *ngIf="userRole!='AAAA'">
+      <ion-button (click)="createNew($event)">
+        <ion-icon name="add-circle"></ion-icon> {{mylang.General.new}}
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+  <ion-searchbar (ionChange)="getItems($event)" debounce='1000' [(ngModel)]="myInput2"></ion-searchbar>
+
+<ion-item  *ngIf="items.length<1">
+    <ion-label mode="ios" >
+         <ion-text  mode="ios" >
+         {{mylang.General.NoData}} 
+        </ion-text>
+      </ion-label>
+</ion-item>
+
+
+  <ion-list inset>
+
+   <!-- <ion-item *ngFor="let item of (items? items.slice(0,280): [])">
+      <ion-label>
+        <h2>{{item.clientName}} </h2>
+        <p>{{item.clientTz}}</p>
+        
+      </ion-label>
+      <ion-label slot="end" class="listBtnSmall">
+          <ion-button expand="outline" item-right (click)="itemSelected($event,item)">{{mylang.General.select}}</ion-button>
+        </ion-label>
+
+    </ion-item>
+-->
+      <ion-item button detail="false" *ngFor="let item of (items? items.slice(0,280): []);let even = even"  [ngClass]="even ? 'odd' : 'even'" (click)="itemSelected($event,item)">
+        <ion-label > <h2>{{item.fullName}} </h2>
+        <p>{{item.clientTz}}</p>
+        </ion-label>
+       
+        <!--<ion-button outline   (click)="itemSelected($event,item)"   >{{mylang.General.select}}</ion-button>  -->
+      </ion-item>
+
+  </ion-list>
+
+</ion-content>

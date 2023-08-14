@@ -1,0 +1,40 @@
+<ion-header [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+  <ion-toolbar>
+    <ion-title>
+      {{mylang.General.sign}}
+    </ion-title>
+
+
+    <ion-buttons slot="end">
+        <ion-button color="danger" (click)="clearPad()"> {{mylang.General.clean}}</ion-button>
+      </ion-buttons>
+      
+    <ion-buttons slot="end">
+      <ion-button (click)="cancelPad()"> {{mylang.General.cancel}}</ion-button>
+    </ion-buttons>
+
+  
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <div class="title">Please draw your Signature</div>-->
+  <ion-row [ngClass]="{'drawing-active': isDrawing}">
+    <ion-col></ion-col>
+    <ion-col>
+        <canvas (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></canvas>
+
+        
+    </ion-col>
+    <ion-col></ion-col>
+
+  </ion-row>
+
+  <ion-row>
+    <ion-buttons>
+      <ion-button  expand="block" color="secondary" (click)="savePad()"> {{mylang.General.save}}</ion-button>
+    </ion-buttons>
+  </ion-row>
+
+</ion-content>

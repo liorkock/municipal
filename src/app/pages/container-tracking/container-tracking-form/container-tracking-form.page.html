@@ -1,0 +1,147 @@
+<ion-header >
+    <ion-toolbar>
+      <ion-title >
+          {{mylang.ContainerUnloading.form}}
+      </ion-title>
+      
+      <ion-buttons slot="start">
+        <ion-button (click)="cancel($event)"> {{mylang.General.cancel}}</ion-button>
+      </ion-buttons>
+  
+      <ion-buttons slot="end"  *ngIf="(userRole=='MovingCompany' && DB_Original.weight=='')||(userRole=='Admin')">
+        <ion-button color="secondary"  (click)="save($event)"> <img width="24" height="24"
+            src="assets/img/saveIcon.png" style="margin-right:6px;margin-left:5px"> {{mylang.General.save}}</ion-button>
+      </ion-buttons>
+  
+    </ion-toolbar>
+  </ion-header>
+  
+<ion-content padding [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+    <ion-list>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.ContainerUnloading.regNum}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.regNum" readonly="true"></ion-input>
+      </ion-item>
+  
+      <ion-item *ngIf="userRole=='Admin'||userRole=='Inspector'">
+        <ion-label color="primary">{{mylang.Container.movingCompanyName}}</ion-label>
+        <ion-textarea type="text" [(ngModel)]="DB.movingCompanyName" readonly="true"></ion-textarea>
+      </ion-item>
+  
+      <ion-item *ngIf="userRole=='Admin'||userRole=='Inspector'">
+        <ion-label color="primary">{{mylang.Container.movingCompanyTz}}</ion-label>
+        <ion-textarea type="text" [(ngModel)]="DB.movingCompanyTz" readonly="true"></ion-textarea>
+      </ion-item>	
+  
+       <ion-item-divider color="light">{{mylang.Project.projectInfo}}</ion-item-divider>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.projectName}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.projectName" readonly="true"></ion-input>
+      </ion-item>
+  
+        <ion-item>
+        <ion-label color="primary">{{mylang.Project.autoInsertTypeId}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.AutoInsertToProjectTypeDesc" readonly="true"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.barCode}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.barCode" readonly="true"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.clientName}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.clientName" readonly="true"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.clientTz}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.clientTz" readonly="true"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.projectTownId}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.projectTown" readonly="true"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.Project.projectAddress}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.projectAddress" readonly="true"></ion-input>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label color="primary">{{mylang.ProjectContainer.insertDate}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.insertDate" style="direction: ltr;"  readonly="true"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.ProjectContainer.existDate}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.existDate" style="direction: ltr;" readonly="true"></ion-input>
+      </ion-item>
+      
+      <ion-item-divider color="light">{{mylang.ContainerUnloading.unloadingDetails}}<b color="danger" required>*</b></ion-item-divider>
+  
+      <!-- <ion-item>
+        <ion-label color="primary">{{mylang.ContainerUnloading.unloadingdate}}</ion-label>			
+         <ion-datetime displayFormat="HH:mm DD/MM/YYYY" [(ngModel)]="DB.unloadingdate" ></ion-datetime>			 
+      </ion-item>-->
+      <ion-item>
+        <ion-label stacked>{{mylang.ContainerUnloading.unloadingdate}}</ion-label>
+        <ion-input slot="end" style="text-align: end;"  value="{{ DB.unloadingdate | date: 'dd/MM/YYYY' }}" id="date1"></ion-input>
+        <ion-popover trigger="date1" >
+          <ng-template>
+          <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="DB.unloadingdate" ></ion-datetime>
+          </ng-template>
+        </ion-popover>
+      </ion-item>
+
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.ContainerUnloading.wasteSiteId}}<b color="danger" required>*</b></ion-label>			
+        <ion-select [(ngModel)]="DB.wasteSiteId" [disabled]="DB_Original.wasteSiteId>0"  [compareWith]="compareWith" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+          <ion-select-option *ngFor="let codeItem of WasteSiteList" [value]="codeItem.codeId">{{codeItem.codeDesc}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+  
+      <ion-item>
+        <ion-label color="primary" >{{mylang.ContainerUnloading.weight}}<b color="danger" required>*</b></ion-label>
+        <ion-input type="number" [(ngModel)]="DB.weight"  ></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.ContainerUnloading.volume}}<b color="danger" required>*</b></ion-label>
+        <ion-input type="number" [(ngModel)]="DB.volume"   ></ion-input>
+      </ion-item>
+  
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.ContainerUnloading.driverName}}</ion-label>
+        <ion-input type="text" [(ngModel)]="DB.driverName" ></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.ProjectContainer.remarks}}</ion-label>
+        <ion-textarea type="text" [(ngModel)]="DB.unloadingRemark"></ion-textarea>
+      </ion-item>
+  
+      
+      <ion-item-divider color="light">{{mylang.ContainerUnloading.unloadingDetailsDevice}}</ion-item-divider>
+  
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.ContainerUnloading.unloadingdate_automatic}}</ion-label>			
+         <ion-input type="text" [(ngModel)]="DB.unloadingdate_automatic" style="direction: ltr;"  readonly="true"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label color="primary">{{mylang.ContainerUnloading.wasteSiteName_auto}}</ion-label>			
+         <ion-input type="text" [(ngModel)]="DB.wasteSiteName_auto" readonly="true"></ion-input>
+      </ion-item>		
+    </ion-list>
+  
+      <p *ngIf="this.DB.weightUpdatedWthinSiteArea==0" style="color: red">{{mylang.ContainerUnloading.notonWasteSiteWhenEdit}}</p>
+  
+  </ion-content>

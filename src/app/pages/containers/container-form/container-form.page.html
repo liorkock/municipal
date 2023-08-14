@@ -1,0 +1,137 @@
+<ion-header >
+  <ion-toolbar>
+    <ion-title >
+      {{mylang.Container.form}}
+    </ion-title>
+
+    <ion-buttons slot="end" *ngIf="userRole=='Admin' ||userRole=='AdminStricted'">
+      <ion-button color="secondary" (click)="save($event)"> <img width="24" height="24" src="assets/img/saveIcon.png"
+          style="margin-right:6px;margin-left:5px"> {{mylang.General.save}}</ion-button>
+    </ion-buttons>
+
+
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel($event)"> {{mylang.General.cancel}}</ion-button>
+    </ion-buttons>
+
+
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+<ion-content padding [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Container.regNum}}<b *ngIf="DB.regNum==''" danger required>*</b></ion-label>
+      <ion-input type="text" [(ngModel)]="DB.regNum"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Container.imeiNumber}}<b *ngIf="DB.imeiNumber==''" danger required>*</b>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.imeiNumber"></ion-input>
+    </ion-item>
+
+   <!-- <ion-item *ngIf="userRole=='Admin' ||userRole=='AdminStricted'">
+      <ion-label color="primary">{{mylang.Container.InstallationDate}}</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="DB.installationDate"></ion-datetime>
+    </ion-item>-->
+
+    <ion-item *ngIf="userRole=='Admin' ||userRole=='AdminStricted'">
+      <ion-label stacked>{{mylang.Container.InstallationDate}}</ion-label>
+      <ion-input slot="end" style="text-align: end;"  value="{{ DB.installationDate | date: 'dd/MM/YYYY' }}" id="date1"></ion-input>
+      <ion-popover trigger="date1" >
+        <ng-template>
+        <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="DB.installationDate" ></ion-datetime>
+        </ng-template>
+      </ion-popover>
+    </ion-item>
+
+
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Container.totalvolume}}<b *ngIf="DB.totalvolume==''" danger required>*</b>
+      </ion-label>
+      <ion-input type="number" [(ngModel)]="DB.totalvolume"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Container.allowedWeight}}</ion-label>
+      <ion-input type="number" [(ngModel)]="DB.allowedWeight"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Container.tera}}</ion-label>
+      <ion-input type="number" [(ngModel)]="DB.tera"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Container.devicelocation}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.devicelocation"></ion-input>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Container.containerColor}}<b *ngIf="DB.containerColor==''" danger
+          required>*</b></ion-label>
+      <ion-select [(ngModel)]="DB.containerColor" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+        <ion-select-option value="green">{{mylang.General.green}}</ion-select-option>
+        <ion-select-option value="yellow">{{mylang.General.yellow}}</ion-select-option>
+        <ion-select-option value="red">{{mylang.General.red}}</ion-select-option>
+        <ion-select-option value="blue">{{mylang.General.blue}}</ion-select-option>
+        <ion-select-option value="black">{{mylang.General.black}}</ion-select-option>
+        <ion-select-option value="aqua">{{mylang.General.aqua}}</ion-select-option>
+        <ion-select-option value="white">{{mylang.General.white}}</ion-select-option>
+
+        <ion-select-option value="orange">{{mylang.General.orange}}</ion-select-option>
+        <ion-select-option value="crimson">{{mylang.General.crimson}}</ion-select-option>
+        <ion-select-option value="brown">{{mylang.General.brown}}</ion-select-option>
+        <ion-select-option value="grey">{{mylang.General.grey}}</ion-select-option>
+        <ion-select-option value="pink">{{mylang.General.pink}}</ion-select-option>
+        <ion-select-option value="purple">{{mylang.General.purple}}</ion-select-option>
+        <ion-select-option value="khaki">{{mylang.General.khaki}}</ion-select-option>
+        <ion-select-option value="turquoise">{{mylang.General.turquoise}}</ion-select-option>
+        <ion-select-option value="indigo">{{mylang.General.indigo}}</ion-select-option>
+        <ion-select-option value="cyan">{{mylang.General.cyan}}</ion-select-option>
+        <ion-select-option value="Maroon">{{mylang.General.Maroon}}</ion-select-option>
+        <ion-select-option value="Magenta">{{mylang.General.Magenta}}</ion-select-option>
+        <ion-select-option value="Silver">{{mylang.General.Silver}}</ion-select-option>
+
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Container.remarks}}</ion-label>
+      <ion-textarea type="text" [(ngModel)]="DB.remarks"></ion-textarea>
+    </ion-item>
+
+
+
+    <ion-item *ngIf="userRole=='Admin'||userRole=='Inspector'">
+      <ion-label color="primary">{{mylang.Container.movingCompanyName}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.movingCompanyName"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="userRole=='Admin'||userRole=='Inspector'">
+      <ion-label color="primary">{{mylang.Container.movingCompanyTz}}</ion-label>
+      <ion-input type="number" [(ngModel)]="DB.movingCompanyTz"></ion-input>
+    </ion-item>
+
+
+
+
+    <ion-item *ngIf="DB.picFile!=''">
+      <ion-card>
+        <img src="{{DB.picFile}}" />
+      </ion-card>
+    </ion-item>
+
+
+  </ion-list>
+
+
+</ion-content>

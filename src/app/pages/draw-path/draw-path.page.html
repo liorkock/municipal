@@ -1,0 +1,133 @@
+<ion-header>
+  <ion-toolbar>
+   <!-- <ion-buttons>
+      <ion-button slot="start" (click)="cancel($event)"> {{mylang.General.goBack}}</ion-button>
+	  <ion-button  *ngIf="titleFromTo=='' && showFilterFlag=='N'" slot="start"  (click)="DrawAllContainers($event)"> <img width="22" height="22" src="assets/img/refresh.png"  style="margin-right:6px;margin-left:5px" > {{mylang.General.refresh}}</ion-button>
+    </ion-buttons>
+	-->
+	
+   <!-- <ion-buttons slot="end" *ngIf="titleFromTo=='' && showFilterFlag=='N'"  >
+      <ion-button (click)="wazeIt($event)"> <img width="24" height="24" src="assets/img/waze-icon.png"
+          style="margin-right:6px;margin-left:5px"> {{mylang.General.waseIt}}</ion-button>
+    </ion-buttons>
+-->
+    <ion-buttons slot="end" *ngIf="showFilterFlag=='N'" >
+      <ion-button (click)="show2datesFilter($event)"> <img width="24" height="24"
+          src="assets/img/tracking/calendar2x.png" style="margin-right:6px;margin-left:5px">
+        {{mylang.General.mapHistory}}</ion-button>
+    </ion-buttons>
+
+    <ion-title [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+      {{titleFromTo}}
+    </ion-title>
+
+
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+<ion-list *ngIf="showFilterFlag=='Y'"  [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+ <!-- <ion-item>
+    <ion-label >{{mylang.General.fromDate}}</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="fromDate"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label >{{mylang.General.toDate}}</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="toDate"></ion-datetime>
+  </ion-item>-->
+
+  <ion-item>
+    <ion-label stacked>{{mylang.General.fromDate}}</ion-label>
+    <ion-input slot="end" style="text-align: end;direction: rtl;"  value="{{ fromDate | date: 'hh:mm dd-MM-yyyy' }}" id="date1"></ion-input>
+    <ion-popover trigger="date1" >
+      <ng-template>
+        <ion-datetime  [showDefaultButtons]="true" presentation="date-time" [(ngModel)]="fromDate" ></ion-datetime>
+      </ng-template>
+    </ion-popover>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked>{{mylang.General.toDate}}</ion-label>
+    <ion-input slot="end" style="text-align: end;"  value="{{ toDate | date: 'hh:mm dd-MM-yyyy'  }}" id="date2"></ion-input>
+    <ion-popover trigger="date2" >
+      <ng-template>
+        <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="toDate" ></ion-datetime>
+      </ng-template>
+    </ion-popover>
+  </ion-item>
+
+</ion-list>
+
+<div *ngIf="showFilterFlag=='Y'"  [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+  <ion-button expand="block" color="secondary" (click)="selectAdvanceFilter($event)" *ngIf="showFilterFlag=='Y'">
+    {{mylang.General.filter}}</ion-button>
+  <br />
+  <ion-button expand="block" color="light" (click)="cancelAdvanceFilter($event)" *ngIf="showFilterFlag=='Y'">
+    {{mylang.General.cancelfilter}}</ion-button>
+</div>
+
+  
+<div [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+  <div >
+
+      <div >
+      
+        <ion-item slot="start">
+          <ion-range  [value]="100"  min="30" max="1000" (ionChange)="speedSliderChanged($event)" >
+            <ion-label slot="start">Slow</ion-label>
+              <ion-label slot="end">Fast</ion-label>
+          </ion-range>
+          <ion-button id="btnPlay"  (click)="replay()">  <ion-icon name="refresh"></ion-icon  > </ion-button>
+            <ion-button id="btnPause" (click)="stopPlay(0)"><ion-icon name="play"></ion-icon  ></ion-button>
+            <ion-button id="btnNext" type="button"   (click)="stopPlay(1)"> <ion-icon name="pause"></ion-icon></ion-button>
+           
+
+        </ion-item>
+        <ion-item slot="start"   *ngIf="showFilterFlag=='takeFromPrevPage'" >
+         <!-- <ion-label color="primary" >{{mylang.Alert.lastStopTime}}</ion-label>-->
+        
+        <ion-input style="border: 1px solid #d0d0d0;max-width: 20%;height: 70%;" type="number" [(ngModel)]="DB.LastStopTime"  ></ion-input>
+        <ion-label  color="primary" style="margin-left: 15px; margin-right: 5px;">דק' מעצירה אחרונה</ion-label>
+        <ion-button  (click)="refreshPath()">  <ion-icon name="refresh"></ion-icon> </ion-button>
+    
+
+      </ion-item>
+         <!-- <table style="width:100%">
+           
+              <tr>
+                 
+                  <td>
+                      <span>&nbsp;&nbsp;</span>
+                  </td>
+                  <td >
+                      <ion-button id="btnPlay"  (click)="replay($event)"> <img width="22" height="22" src="assets/img/refresh.png"
+                        style="margin-right:6px;"></ion-button>
+                  </td>
+                  <td >
+                      <ion-button id="btnPause" type="button" class="btn btn-outline blue btn-sm" style="padding: 2px 5px 2px 5px;" (click)="stopPlay(0)"><span >Play</span> <i class="fa fa-play"></i> </ion-button>
+                  </td>
+                  <td >
+                      <ion-button id="btnNext" type="button" class="btn btn-outline blue btn-sm" style="padding: 2px 5px 2px 5px;" (click)="stopPlay(1)"> <span >pause</span><i class="fa fa-pause"></i></ion-button>
+                  </td>
+
+
+              </tr>
+          </table>-->
+      </div>
+     
+      <!--<div >
+         
+          <ion-button (click)="closeMap">{{mylang.General.cancel}}</ion-button>
+        </div>-->
+  </div>
+</div>
+  
+
+  <div id="pathMap" style="min-width: 200px;min-height: 400px;height: 100%;width: 100%;position: absolute"></div>
+  <div style="height: 100%;width: 100%" id="map_canvas"></div>
+
+  
+</ion-content>

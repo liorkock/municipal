@@ -1,0 +1,136 @@
+<ion-header  [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+  <ion-toolbar>
+    <ion-title>
+      {{mylang.Client.form}}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button icon-left (click)="CanelNoSave($event)"> {{mylang.General.cancel}}</ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start">
+      <ion-button color="secondary" icon-left (click)="save($event)"> <img width="24" height="24"
+          src="assets/img/saveIcon.png" style="margin-right:6px;margin-left:5px"> {{mylang.General.save}}</ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+  <ion-list>
+
+    <ion-item *ngIf="DB.serviceSupplierId>0">
+      <ion-label color="primary">{{mylang.SupplierOrder.serviceSupplierName}} <b *ngIf="DB.serviceSupplierName==''" color="danger" required>*</b>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.serviceSupplierName"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf=" (userRole=='Admin')" >    
+      <ion-label color="primary">{{mylang.SupplierOrder.serviceSupplierForm}}<b *ngIf="DB.serviceSupplierId<1" color="danger" required>*</b></ion-label>
+      <ion-input type="text"    [(ngModel)]="DB.serviceSupplierName" readonly="true"></ion-input>
+       <ion-button expand="outline"  item-right (click)="showSSList($event)">{{mylang.General.select}}</ion-button>  
+    </ion-item>
+    <ion-searchbar  *ngIf="showSSFlag==true" debounce='1000' (ionChange)="getServiceSupplierItems($event)" [(ngModel)]="myInput_ss"  ></ion-searchbar>
+    <ion-list inset  *ngIf="showSSFlag==true">
+      <ion-item button detail="false" [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (ss_items? ss_items.slice(0,220): []);let even = even" (click)=" ss_itemSelected($event,item)">
+     <ion-label>
+      <h2>{{item.serviceSupplierName}} </h2>
+      <p>{{item.address}}</p>
+      
+    </ion-label>
+  
+      </ion-item>
+    </ion-list>
+
+    <ion-item>
+			<ion-label stacked>{{mylang.SupplierOrder.clientType}}</ion-label>
+			<ion-select [(ngModel)]="DB.clientType" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}} >
+				<ion-select-option *ngFor="let codeItem of ClientTypesList" [value]="codeItem.codeId">{{codeItem.codeDesc}}</ion-select-option>
+			</ion-select>
+		</ion-item>
+
+    <ion-item *ngIf="DB.clientType==2">
+      <ion-label color="primary">{{mylang.SupplierOrder.companyName}} <b *ngIf="DB.clientName==''" color="danger" required>*</b>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.clientName"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="DB.clientType==1">
+      <ion-label color="primary">{{mylang.Client.clientName}} <b *ngIf="DB.clientName==''" color="danger" required>*</b>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.clientName"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="DB.clientType==1">
+      <ion-label color="primary">{{mylang.SupplierOrder.lastName}} <b *ngIf="DB.clientLastName==''" color="danger" required>*</b>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.clientLastName"></ion-input>
+    </ion-item>
+
+    
+    
+
+    <!--<ion-item>
+      <ion-label color="primary">{{mylang.Client.clientName}} <b *ngIf="DB.clientName==''" color="danger" required>*</b>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.clientName"></ion-input>
+    </ion-item>
+  -->
+    <ion-item>
+      <ion-label color="primary">{{mylang.Client.clientTz}} 
+      </ion-label><b *ngIf="DB.clientTz==''" style="color:#f04141 ; padding-right: 1px;" color="danger" required>*</b>
+      <ion-input type="number" [(ngModel)]="DB.clientTz"></ion-input>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Client.email}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Client.clientPhone}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.clientPhone"></ion-input>
+    </ion-item>
+
+
+    <ion-item  *ngIf="mylang.currentLang=='Heb' && (DB.townId>0 || DB.townId<0 && DB.city=='') && DB.serviceSupplierId>0" >
+      <ion-label color="primary" >{{mylang.SupplierOrder.townId}}</ion-label><b style="color:#f04141 ;" *ngIf="DB.townId<1"  required>*</b>
+      <ion-input  [(ngModel)]="DB.city"  readonly="true"></ion-input>
+      <ion-button expand="outline"   (click)="selectNewTown($event)">{{mylang.General.select}}</ion-button>  
+    </ion-item>
+
+    <ion-item  *ngIf="mylang.currentLang=='Heb' && (DB.townId>0 || DB.townId<0 && DB.city=='') && DB.serviceSupplierId<1" >
+      <ion-label color="primary" >{{mylang.SupplierOrder.townId}}</ion-label>
+      <ion-input  [(ngModel)]="DB.city"  readonly="true"></ion-input>
+      <ion-button expand="outline"   (click)="selectNewTown($event)">{{mylang.General.select}}</ion-button>  
+    </ion-item>
+
+    <ion-item *ngIf="mylang.currentLang=='Heb' && !(DB.townId>0 || DB.townId<0 && DB.city=='')">
+      <ion-label color="primary">{{mylang.Client.city}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.city"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Client.street}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.street"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">{{mylang.Client.postlCode}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.postlCode"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label color="primary">{{mylang.Client.contactPerson}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.contactPerson"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">{{mylang.Client.remarks}}</ion-label>
+      <ion-textarea type="text" [(ngModel)]="DB.remarks"></ion-textarea>
+    </ion-item>
+
+  </ion-list>
+
+
+</ion-content>

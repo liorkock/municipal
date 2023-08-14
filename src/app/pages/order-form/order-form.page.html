@@ -1,0 +1,187 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title >
+      {{mylang.Order.form}}
+    </ion-title>
+    <ion-buttons slot="end" *ngIf="DB.projectLat!='' && DB.projectLong!='' && DB.orderId>0">
+      <ion-button (click)="wazeIt($event)"> <img width="24" height="24" src="assets/img/waze-icon.png"
+          style="margin-right:6px;margin-left:5px"> {{mylang.General.waseIt}}</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="secondary" (click)="save($event)"> <img width="24" height="24" src="assets/img/saveIcon.png"
+          style="margin-right:6px;margin-left:5px"> {{mylang.General.save}}</ion-button>
+    </ion-buttons>
+
+   
+
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel($event)"> {{mylang.General.cancel}}</ion-button>
+    </ion-buttons>
+
+ 
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+
+  <ion-list *ngIf="showMCsFlag==false"> 
+      <ion-item *ngIf=" (userRole=='Admin')" >    
+        <ion-label color="primary">{{mylang.Project.movingCompanyName}}<b *ngIf="DB.movingCompanyTz=='0'||DB.movingCompanyTz==''" color="danger" required>*</b></ion-label>
+        <ion-input type="text"    [(ngModel)]="DB.movingCompanyName" readonly="true"></ion-input>
+        <ion-button expand="outline" item-right (click)="showMCsList($event)">{{mylang.General.select}}</ion-button>  
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{mylang.Order.orderType}}</ion-label>
+        <ion-select (ionChange)="setOrderTypeDesc($event)" [selectedText]="orderTypeDesc" [(ngModel)]="DB.OrderType" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+          <ion-select-option *ngFor="let codeItem of orderTypesList" [value]="codeItem.codeId"  > {{codeItem.codeDesc}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+    <ion-item *ngIf="DB.orderNumber>0">
+      <ion-label color="primary">{{mylang.Order.orderNumber}}</ion-label>
+      <ion-input type="text" readonly="true" disabled="true" [(ngModel)]="DB.orderNumber"></ion-input>
+    </ion-item>
+
+
+   <!-- <ion-item>
+      <ion-label color="primary">{{mylang.Order.orderDate}}</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="DB.orderDate"></ion-datetime>
+    </ion-item>
+    -->
+    <ion-item >
+      <ion-label stacked>{{mylang.Order.orderDate}}</ion-label>
+      <ion-input slot="end" style="text-align: end;"  value="{{ DB.orderDate | date: 'dd/MM/YYYY' }}" id="date1"></ion-input>
+      <ion-popover trigger="date1" >
+        <ng-template>
+        <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="DB.orderDate" ></ion-datetime>
+        </ng-template>
+      </ion-popover>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>{{mylang.Order.status}}</ion-label>
+      <ion-select  [(ngModel)]="DB.status" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}} >
+        <ion-select-option *ngFor="let codeItem of statusList" [value]="codeItem.codeId">{{codeItem.codeDesc}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Project.clientName}}<b *ngIf="DB.clientName==''" color="danger" required>*</b>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.clientName" readonly="true"></ion-input>
+      <ion-button expand="outline" item-right (click)="showClientList($event)">{{mylang.General.select}}</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Order.regNum}} <b *ngIf="DB.regNum==''" color="danger" required>*</b>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.regNum" readonly="true"></ion-input>
+      <ion-button expand="outline" item-right (click)="showContainerList($event)">{{mylang.General.select}}</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Order.orderVolume}} <b *ngIf="DB.volume==''" color="danger" required>*</b>
+      </ion-label>
+      <ion-input type="number" [(ngModel)]="DB.volume"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Order.vehicleRegNum}} </ion-label>
+      <ion-input type="number" [(ngModel)]="DB.vehicleRegNum"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Order.driverId}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.driverName" readonly="true"></ion-input>
+      <ion-button expand="outline" item-right (click)="showDriverList($event)">{{mylang.General.select}}</ion-button>
+    </ion-item>
+
+
+    <ion-item >
+      <ion-label color="primary">{{mylang.Project.projectName}} <b *ngIf="(DB.OrderType=='2')||(DB.OrderType=='3')" color="danger" required>*</b></ion-label>
+      <ion-input type="text" [(ngModel)]="DB.projectName" readonly="true"></ion-input>
+      <ion-button expand="outline" item-right (click)="showProjectList($event)">{{mylang.General.select}}</ion-button>
+    </ion-item>
+
+   <!-- <ion-item *ngIf=" (DB.OrderType=='1')">
+      <ion-label color="primary">{{mylang.Project.projectName}}</ion-label>
+      <ion-input type="text" [(ngModel)]="DB.projectName" readonly="true"></ion-input>
+      <ion-button expand="outline" item-right (click)="showProjectList($event)">{{mylang.General.select}}</ion-button>
+    </ion-item>*ngIf=" (DB.OrderType=='2')||(DB.OrderType=='3')"
+-->
+
+    <ion-item-divider color="light">{{mylang.Order.receiveTab}}</ion-item-divider>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Order.isSigned}}</ion-label>
+      <ion-toggle [(ngModel)]="DB.isSigned"></ion-toggle>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-row>
+        <ion-col></ion-col>
+        <ion-col width-80>
+          <img [src]="DB.clientSignature" />
+        </ion-col>
+        <ion-col></ion-col>
+      </ion-row>
+      <ion-button outline item-right (click)="showSignaturePad($event)">{{mylang.General.sign}}</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Order.receiverName}} </ion-label>
+      <ion-input type="text" [(ngModel)]="DB.receiverName"></ion-input>
+    </ion-item>
+
+   <!-- <ion-item>
+      <ion-label color="primary">{{mylang.Order.receiveDate}}</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="DB.receiveDate"></ion-datetime>
+    </ion-item>
+    -->
+
+    <ion-item >
+      <ion-label stacked>{{mylang.Order.receiveDate}}</ion-label>
+      <ion-input slot="end" style="text-align: end;"  value="{{ DB.receiveDate | date: 'dd/MM/YYYY' }}" id="date2"></ion-input>
+      <ion-popover trigger="date2" >
+        <ng-template>
+        <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="DB.receiveDate" ></ion-datetime>
+        </ng-template>
+      </ion-popover>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary">{{mylang.Order.remarks}}</ion-label>
+      <ion-textarea type="text" [(ngModel)]="DB.remarks"></ion-textarea>
+    </ion-item>
+
+  </ion-list>
+
+
+ <ion-searchbar  *ngIf="showMCsFlag==true" (ionChange)="getMovingCompanyItems($event)" debounce='1000' [(ngModel)]="myInput_mc"  ></ion-searchbar>
+      <ion-list inset  *ngIf="showMCsFlag==true">
+        <!--ion-item *ngFor="let item of (mc_items? mc_items.slice(0,220): [])" >    -->
+        <ion-item button detail="false" [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (mc_items? mc_items.slice(0,220): []);let even = even" (click)=" mc_itemSelected($event,item)">
+
+           <ion-label>
+          <p>{{item.movingCompanyName}}</p>
+        
+          <p >{{item.movingCompanyTz}}</p>   
+          </ion-label>
+
+        <!--<ion-label slot="end" class="listBtn">
+          <ion-button outline  item-right (click)="mc_itemSelected($event,item)">{{mylang.General.select}}</ion-button>            
+        </ion-label>
+-->
+         
+          
+          
+        </ion-item>
+      </ion-list>
+
+</ion-content>

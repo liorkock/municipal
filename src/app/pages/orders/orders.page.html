@@ -1,0 +1,124 @@
+
+
+<ion-header>
+	<ion-toolbar>
+		<ion-title >
+			{{mylang.Order.list}}
+		</ion-title>
+		<ion-buttons slot="end" >
+			<ion-button   (click)="createNew($event)"> <ion-icon name="add-circle"></ion-icon>  {{mylang.General.new}}</ion-button >
+		</ion-buttons>
+		<ion-buttons slot="end" *ngIf="showFilterFlag=='N'">			
+			<ion-button   (click)="showAdvanceFilter($event)"> <img width="24" height="24" src="assets/img/filter2x.png"> {{mylang.General.ShowfilterOptions}}</ion-button >
+		</ion-buttons>
+    	<ion-buttons slot="start">
+        <!--<ion-button  (click)="CanelNoSave($event)">  {{mylang.General.goBack}}</ion-button>-->
+        	<ion-back-button icon="ios-arrow-back" mode="ios" style="direction: ltr;" text="{{mylang.General.goBack}}"  ></ion-back-button>
+    	</ion-buttons>
+    	<ion-buttons slot="start"  *ngIf="showFilterFlag=='N'">
+			<ion-button  (click)="getItems($event)"> <img width="22" height="22" src="assets/img/refresh.png"  style="margin-right:6px;" > {{mylang.General.refresh}}</ion-button >
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+
+
+<ion-content [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+	
+	 <ion-searchbar (ionChange)="getItems($event)" debounce='1000' [(ngModel)]="myInput" *ngIf="showFilterFlag=='N'" showCancelButton='true' cancelButtonText='{{mylang.General.cancelSearch}}'></ion-searchbar>
+
+	 <ion-item  *ngIf="items.length<1">
+    <ion-label mode="ios" >
+         <ion-text  mode="ios" >
+         {{mylang.General.NoData}} 
+        </ion-text>
+     </ion-label>
+ 	</ion-item>
+	<ion-list inset  *ngIf="showFilterFlag=='N'" >
+	  <!--ion-item *ngFor="let item of (items? items.slice(0,280): [])" >     -->
+ <ion-item button detail="false" [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (items? items.slice(0,220): []);let even = even" (click)="itemSelected($event,item)">
+        <ion-label [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+			<h2> {{item.orderNumber}} ,{{item.OrderTypeDesc}} - {{item.statusDesc}}</h2>	
+			<p> {{item.orderDate}} </p>
+			<p *ngIf="userRole=='Admin'||userRole=='Inspector'" > <img  height="16" width="16" style="height:16px;width:16px" src="assets/img/contractors.png"> {{item.movingCompanyName}}</p>
+			<p><img *ngIf="item.projectAddress!=''"   height="16" width="16" style="height:16px;width:16px" src="assets/img/mapIcons/projectAddressIcon.png"> {{item.projectAddress}}</p>		
+			<p><img *ngIf="item.regNum!=''"   height="16" width="16" style="height:16px;width:16px" src="assets/img/containers_2x.png">  {{item.regNum}} </p>
+			<p><img *ngIf="item.clientName!=''"  height="16" width="16" style="height:16px;width:16px" src="assets/img/clients.png">  {{item.clientName}} </p>
+			
+			
+    </ion-label>
+    <!--<ion-label slot="end" class="listBtnSmall">
+        <ion-button expand="outline" (click)="itemSelected($event,item)">{{mylang.General.select}}</ion-button>
+      </ion-label>-->
+
+	  </ion-item>
+	</ion-list>
+
+
+
+
+	
+	<ion-list *ngIf="showFilterFlag=='Y'">
+		<!--<ion-item>
+			<ion-label stacked>{{mylang.General.fromDate}}</ion-label>
+			<ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="fromDate"></ion-datetime>
+		</ion-item>
+
+		<ion-item>
+			<ion-label stacked>{{mylang.General.toDate}}</ion-label>
+			<ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="toDate"></ion-datetime>
+		</ion-item>-->
+		<ion-item>
+			<ion-label stacked>{{mylang.General.fromDate}}</ion-label>
+			<ion-input slot="end" style="text-align: end;"  value="{{ fromDate | date: 'dd/MM/YYYY' }}" id="date1"></ion-input>
+			<ion-popover trigger="date1" >
+			  <ng-template>
+				<ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="fromDate" ></ion-datetime>
+			  </ng-template>
+			</ion-popover>
+		  </ion-item>
+		  <ion-item>
+			<ion-label stacked>{{mylang.General.toDate}}</ion-label>
+			<ion-input slot="end" style="text-align: end;"  value="{{ toDate | date: 'dd/MM/YYYY' }}" id="date2"></ion-input>
+			<ion-popover trigger="date2" >
+			  <ng-template>
+				<ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="toDate" ></ion-datetime>
+			  </ng-template>
+			</ion-popover>
+		  </ion-item>
+
+
+		<ion-item>
+			<ion-label stacked>{{mylang.Order.status}}</ion-label>
+			<ion-select [(ngModel)]="statusFilter" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+				<ion-select-option *ngFor="let codeItem of statusList" [value]="codeItem.codeId">{{codeItem.codeDesc}}</ion-select-option>
+			</ion-select>
+		</ion-item>
+		<ion-item>
+			<ion-label stacked>{{mylang.Order.orderType}}</ion-label>
+			<ion-select [(ngModel)]="orderTypeFilter" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+				<ion-select-option *ngFor="let codeItem of orderTypesListAll" [value]="codeItem.codeId">{{codeItem.codeDesc}}</ion-select-option>
+			</ion-select>
+		</ion-item>
+
+
+		<ion-item *ngIf="userRole!='MovingCompany'">
+			<ion-label stacked>{{mylang.Project.movingCompanyName}}</ion-label>
+			<ion-select [(ngModel)]="movingCompanyFilter" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+				<ion-select-option *ngFor="let codeItem of MovingCompanyList" [value]="codeItem.codeId">{{codeItem.codeDesc}}</ion-select-option>
+			</ion-select>
+		</ion-item>
+
+		<ion-item>
+			<ion-label color="primary">{{mylang.Order.showAllOrders }}</ion-label>
+			<ion-toggle  [(ngModel)]="showForAllDrivers"></ion-toggle >
+		</ion-item>
+
+
+
+	</ion-list>
+
+  <ion-button  expand="block"  color="secondary" (click)="selectAdvanceFilter($event)"  *ngIf="showFilterFlag=='Y'" > {{mylang.General.filter}}</ion-button >
+   <br/>
+ <ion-button  expand="block"  color="light" (click)="cancelAdvanceFilter($event)"  *ngIf="showFilterFlag=='Y'" > {{mylang.General.cancelfilter}}</ion-button >
+
+</ion-content>

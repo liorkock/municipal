@@ -1,0 +1,150 @@
+<ion-header >
+  <ion-toolbar>
+    <ion-title  size="small" style="padding-right: 8px;padding-left: 10px;"  >
+      {{mylang.Container.list}} {{start}}{{containersCount}}{{end}}
+    </ion-title>
+    <ion-buttons slot="start" >
+      <!--<ion-button routerLink="/home" routerDirection="root"><i class="ion-arrow-left-c"></i> {{mylang.General.goBack}}</ion-button>-->
+
+      <ion-back-button icon="ios-arrow-back" mode="ios" size="small"  text="{{mylang.General.goBack}}"  ></ion-back-button>
+    
+
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="showFilterFlag=='N'">
+      <ion-button (click)="drawAllContainers($event)"> <img width="22" height="22" src="assets/img/map2x.png"
+          style="margin-right:6px;margin-left:5px"> {{mylang.General.mapAllContainers}}</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="showFilterFlag=='N'">
+      <ion-button (click)="getItems($event)"> <img width="20" height="20" src="assets/img/refresh.png"
+          style="margin-right:6px;"> {{mylang.General.refresh}}</ion-button>
+   
+      <ion-button (click)="showAdvanceFilter($event)"> <img width="20" height="20" src="assets/img/filter2x.png">
+        {{mylang.General.ShowfilterOptions}}</ion-button>
+    </ion-buttons> 
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}" [ngStyle]="{'opacity': Opacity}">
+
+  <ion-searchbar (search)="filterItems($event)" ionChange="" debounce='10000' [(ngModel)]="myInput" *ngIf="showFilterFlag=='N'" showCancelButton='true' cancelButtonText='{{mylang.General.cancelSearch}}'></ion-searchbar>
+   <ion-item  *ngIf="items.length<1">
+
+    <ion-label mode="ios" >
+         <ion-text  mode="ios" >
+         {{mylang.General.NoData}} 
+        </ion-text>
+      </ion-label>
+ </ion-item>
+  <ion-list inset *ngIf="showFilterFlag=='N'">
+    <!--<ion-item *ngFor="let item of (items? items.slice(0,250): [])">-->
+    <ion-item button detail="false" [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (items? items.slice(0,250): []);let even = even" (click)="showActions($event,item)">
+    <ion-ripple-effect></ion-ripple-effect>
+      <ion-avatar slot="start" class="ContainerColor">
+        <div>
+          <button expand="outline" [style.background-color]="item.containerColor" style="height: 24px;border: 1px;border-radius: 4px" ></button>
+        </div>
+      </ion-avatar>
+
+
+
+      <ion-label [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+        <h2>{{item.regNum}}</h2>
+        <p *ngIf="userRole=='Admin'||userRole=='Inspector' || userRole=='AdminStricted'">{{item.movingCompanyName}}</p>
+        <p>{{item.locationDate}}</p>
+        <p>{{item.clientName}}</p>
+        <p>{{item.projectAddress}}</p>
+        <!--<p>{{item.insertDate}}</p>-->
+      
+
+      </ion-label>
+
+      <ion-label slot="end" class="ContainerBatary">
+        <div>
+          <img height="24" width="24" *ngIf="item.batarylevel>=90" src="assets/img/battery/battery100_2x.png">
+          <img height="24" width="24" *ngIf="item.batarylevel>=70 && item.batarylevel<90"
+            src="assets/img/battery/battery80_2x.png">
+          <img height="24" width="24" *ngIf="item.batarylevel>=60 && item.batarylevel<70"
+            src="assets/img/battery/battery60_2x.png">
+          <img height="24" width="24" *ngIf="item.batarylevel>=30 && item.batarylevel<60"
+            src="assets/img/battery/battery40_2x.png">
+          <img height="24" width="24" *ngIf="item.batarylevel>=11 && item.batarylevel<30"
+            src="assets/img/battery/battery20_2x.png">
+          <img height="24" width="24" *ngIf="item.batarylevel>=1 && item.batarylevel<11"
+            src="assets/img/battery/battery0_2x.png">
+          <img height="24" width="24" *ngIf="item.batarylevel==''" src="assets/img/battery/battery0_2x.png">
+        </div>
+      </ion-label>
+
+      <!--<ion-label slot="end" class="listBtn">
+        
+        <ion-button expand="outline" >{{mylang.General.showActions}}</ion-button>
+      </ion-label>-->
+
+    </ion-item>
+  </ion-list>
+
+
+  <ion-list *ngIf="showFilterFlag=='Y'"  [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+    <ion-item *ngIf="userRole!='MovingCompany'">
+      <ion-label stacked>{{mylang.Project.movingCompanyName}}</ion-label>
+      <ion-select [(ngModel)]="movingCompanyFilter" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}}>
+        <ion-select-option *ngFor="let codeItem of MovingCompanyList" [value]="codeItem.codeId">{{codeItem.codeDesc}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="showFilterFlag=='Y'"  >
+    <ion-radio-group [(ngModel)]="filterContainerState">
+    <ion-list-header>
+      {{mylang.ContainerState.status}}
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>{{mylang.ContainerState.statusAll}}</ion-label>
+      <ion-radio value="" checked></ion-radio>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{mylang.ContainerState.statusOnProject}}</ion-label>
+      <ion-radio value="onproject"></ion-radio>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{mylang.ContainerState.statusMoving}}</ion-label>
+      <ion-radio value="moving"></ion-radio>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{mylang.ContainerState.statusOnWareHouse}}</ion-label>
+      <ion-radio value="onwarehouse"></ion-radio>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{mylang.ContainerState.statusOutOfProject}}</ion-label>
+      <ion-radio value="outofproject"></ion-radio>
+    </ion-item>
+  </ion-radio-group>
+  </ion-list>
+
+
+  <ion-list *ngIf="showFilterFlag=='Y'">
+    <ion-item>
+      <ion-label stacked>{{mylang.General.findInArround }}</ion-label>
+      <ion-toggle [(ngModel)]="findInArround "></ion-toggle>
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="showFilterFlag=='Y'">
+    <ion-item>
+      <ion-label stacked>{{mylang.Container.showEmptyBatary }}</ion-label>
+      <ion-toggle [(ngModel)]="showEmptyBatary"></ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="secondary" (click)="selectAdvanceFilter($event)" *ngIf="showFilterFlag=='Y'">{{mylang.General.filter}}</ion-button>
+  <br />
+  <ion-button expand="block" color="light" (click)="cancelAdvanceFilter($event)" *ngIf="showFilterFlag=='Y'">  {{mylang.General.cancelfilter}}</ion-button>
+
+
+</ion-content>

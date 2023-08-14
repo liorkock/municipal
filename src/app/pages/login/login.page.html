@@ -1,0 +1,46 @@
+<ion-header>
+ 
+
+</ion-header>
+
+<ion-content padding class="LoginPage">
+
+
+
+
+
+<br>
+
+  <ion-row style="direction:rtl">
+    <ion-col ><img  src="assets/img/EcoWaste_Logo.jpg" style="width:46%;height: auto" ></ion-col>
+  </ion-row>
+
+
+<ion-list>
+
+  <ion-item>
+    <ion-label position="stacked">UserName or Email</ion-label>
+    <ion-input type="text"  [(ngModel)]="user.email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Password</ion-label>
+    <ion-input type="password"  [(ngModel)]="user.password"></ion-input>
+  </ion-item>
+
+  <ion-item>
+  <ion-label position="stacked">Server</ion-label>
+  <ion-select [(ngModel)]="user.server">
+    <ion-select-option  value="il" selected="true">IL</ion-select-option >
+    <ion-select-option  value="uk" selected="false">UK</ion-select-option >    
+    <!--ion-select-option value="test" selected="false">TEST</ion-select-option>-->
+  
+  </ion-select>
+</ion-item>
+
+</ion-list>
+
+
+ <ion-button expand="block" color="secondary" (click)="login($event)" >Login</ion-button>
+
+</ion-content>

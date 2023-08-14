@@ -1,0 +1,91 @@
+<ion-header >
+  <ion-toolbar>
+      <ion-title  size="small" style="padding-right: 8px;padding-left: 10px;"  >
+      {{titleFromTo}}
+    </ion-title>
+
+
+     <ion-buttons slot="start" >
+      <ion-button  (click)="cancel($event)"> {{mylang.General.goBack}}</ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start" *ngIf="titleFromTo=='' && showFilterFlag=='N'" >
+        <ion-button   (click)="getdate(myid)">
+         <img width="22" height="22" src="assets/img/refresh.png"  style="margin-right:6px;margin-left:5px" > {{mylang.General.refresh}}</ion-button>
+    </ion-buttons>
+
+     <ion-buttons slot="start"  *ngIf=" showFilterFlag=='takeFromPrevPage'" >
+        <ion-button   (click)="DrawAllContainers()">
+         <img width="22" height="22" src="assets/img/refresh.png"  style="margin-right:6px;margin-left:5px" > {{mylang.General.refresh}}</ion-button>
+  
+    </ion-buttons>
+
+    
+
+    <ion-buttons slot="end" *ngIf="titleFromTo=='' && showFilterFlag=='N'"  >
+      <ion-button (click)="wazeIt($event)"> <img width="24" height="24" src="assets/img/waze-icon.png"
+          style="margin-right:6px;margin-left:5px"> {{mylang.General.waseIt}}</ion-button>
+    </ion-buttons>
+   <ion-buttons slot="end" *ngIf="showFilterFlag=='N'" >
+      <ion-button (click)="show2datesFilter($event)"> <img width="24" height="24"
+          src="assets/img/tracking/calendar2x.png" style="margin-right:6px;margin-left:5px">
+        {{mylang.General.mapHistory}}</ion-button>
+    </ion-buttons>
+
+  
+
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+<ion-list *ngIf="showFilterFlag=='Y'"  [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+ <!-- <ion-item>
+    <ion-label >{{mylang.General.fromDate}}</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="fromDate"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label >{{mylang.General.toDate}}</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="toDate"></ion-datetime>
+  </ion-item>
+-->
+
+<ion-item>
+  <ion-label stacked>{{mylang.General.fromDate}}</ion-label>
+  <ion-input slot="end" style="text-align: end;"  value="{{ fromDate | date: 'dd/MM/YYYY' }}" id="date1"></ion-input>
+  <ion-popover trigger="date1" >
+    <ng-template>
+      <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="fromDate" ></ion-datetime>
+    </ng-template>
+  </ion-popover>
+</ion-item>
+<ion-item>
+  <ion-label stacked>{{mylang.General.toDate}}</ion-label>
+  <ion-input slot="end" style="text-align: end;"  value="{{ toDate | date: 'dd/MM/YYYY' }}" id="date2"></ion-input>
+  <ion-popover trigger="date2" >
+    <ng-template>
+      <ion-datetime  [showDefaultButtons]="true" presentation="date" [(ngModel)]="toDate" ></ion-datetime>
+    </ng-template>
+  </ion-popover>
+</ion-item>
+
+</ion-list>
+<div *ngIf="showFilterFlag=='Y'"  [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+  <ion-button expand="block" color="secondary" (click)="selectAdvanceFilter($event)" *ngIf="showFilterFlag=='Y'">
+    {{mylang.General.filter}}</ion-button>
+  <br />
+  <ion-button expand="block" color="light" (click)="cancelAdvanceFilter($event)" *ngIf="showFilterFlag=='Y'">
+    {{mylang.General.cancelfilter}}</ion-button>
+</div>
+
+  <div class="map-wrapper">
+   <div #map id="map"  style="min-width: 200px;min-height: 400px;height: 100%;width: 100%;position: absolute"></div>
+  
+ 
+ 
+</div>
+ <!--div style="height: 100%;width: 100%" id="map_canvas"></div>-->
+</ion-content>

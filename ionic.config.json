@@ -1,5 +1,7 @@
 {
   "name": "MunicipalV7",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

@@ -1,0 +1,79 @@
+<ion-header>
+
+  <ion-toolbar>
+
+    <ion-title [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+      {{mylang.ProjectContainer.projectContainer}}
+    </ion-title>
+
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel($event)"> {{mylang.General.goBack}}</ion-button>
+    </ion-buttons>
+
+    <!--<ion-buttons slot="end" *ngIf="userRole!='AAAA'">-->
+    <ion-buttons slot="end" >
+      <ion-button (click)="addNewProjectContainer($event)">{{mylang.ProjectContainer.add}} </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+  <ion-list>
+    <ion-list-header>
+      <h1>{{mylang.ProjectContainer.projectContainer}}</h1>
+    </ion-list-header>
+
+
+    <ion-item *ngFor="let item of currentItems">
+      <ion-avatar slot="start">
+        <div>
+        <ion-icon name="contract" slot="end"></ion-icon>
+      </div>
+      </ion-avatar>
+
+      <ion-label>
+        <h2>{{item.regNum}}</h2>
+        <h3>{{item.insertDate}}</h3>
+        <p>{{item.remarks}}</p>
+      </ion-label>
+
+      <ion-label slot="end" class="listBtn" style="display:contents">
+        <ion-button expand="outline" (click)="setExit($event,item)">{{mylang.General.exitContainer}}</ion-button>
+      </ion-label>
+
+
+    </ion-item>
+  </ion-list>
+
+
+  <ion-list>
+    <ion-list-header>
+      <h1>{{mylang.ProjectContainer.projectContainerHistirical}}</h1>
+    </ion-list-header>
+    <ion-item *ngFor="let item of historicalItems">
+
+      <ion-avatar slot="start">
+        <div>
+          <img *ngIf="item.unloadingdate==''" height="32" width="32" src="assets/img/tracking/onMoving.png">
+          <img *ngIf="item.unloadingdate!='' && item.wasteSiteName==''" height="32" width="32"
+            src="assets/img/tracking/illegal2x.png">
+          <img *ngIf="item.unloadingdate!='' && item.wasteSiteName!=''" height="32" width="32"
+            src="assets/img/tracking/legal2x.png">
+        </div>
+      </ion-avatar>
+
+      <ion-label>
+        <h2>{{item.regNum}}</h2>
+        <h4>{{item.insertDate}} -> {{item.existDate}} </h4>
+        <p>{{item.wasteSiteName}} {{item.unloadingdate}} </p>
+        <p *ngIf="item.wasteSiteName!=''">{{item.volume}}m³, {{item.weight}}T</p>
+      </ion-label>
+
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

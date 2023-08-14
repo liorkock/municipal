@@ -1,0 +1,123 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title style="text-align: center;">
+            {{mylang.HomePage.infoPage}}
+        </ion-title>
+
+        <!--<ion-buttons  slot="start"  >
+      <ion-button   routerLink="/home" routerDirection="root">  {{mylang.General.goBack}}</ion-button>
+  </ion-buttons>-->
+        <ion-buttons slot="start">
+            <!--<ion-button  routerLink="/home" routerDirection="root">  {{mylang.General.goBack}}</ion-button>-->
+            <ion-back-button icon="ios-arrow-back" mode="ios" style="direction: ltr;" text="{{mylang.General.goBack}}"></ion-back-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+    <ion-grid *ngIf="(mylang.currentLang=='Heb')">
+        <ion-row>
+            <ion-col text-center><img src="assets/img/EcoWaste_Logo.jpg" width="50%"></ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col text-center>
+                <h1>מערכת ניהול פסולת בניין ברשות המוניציפלית </h1>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <h3>קצת רקע עלינו</h3>
+                <b>סייבר גרין פתרונות מקוונים בע"מ</b> מפתחת מערכות מידע מתקדמות וביניהן מערכת כוללת לניהול פסולת, בעזרת אמצעים טכנולוגיים מתקדמים. המערכת מאפשרת ממשק יעיל בכל ההיבטים - ברמת הלקוח וברמת הרשות, המטמנות והחברות המפעילות. בנוסף, חברת סייבר
+                גרין פיתחה מערכת למדידת נפח משאית ומערכת מיקום גיאוגרפית, המאפשרת לזהות מיקום ולעקוב אחר מכולות פסולת ונקודות פריקה. החברה הוקמה ב – 2014, ותהליך הפיתוח בוצע בשיתוף המדען הראשי במשרד הכלכלה. לחברה פטנט רשום על הטכנולוגיות המרכזיות בפיתוח.
+
+
+                <h3>אודות האפליקציה</h3>
+                האפליקציה מעניקה חווית משתמש ומאפשרת מעקב אחר מכולות פסולת, מזוהות חד ערכית, מהצבתן, החלפתן ופריקתן באתר מורשה. האפליקציה מאפשרת למשתמש:
+                <ul>
+                    <li>ניהול מכולות באתרי בניה ושיפוצים – כולל החלפת מכולות</li>
+                    <li>מידע גיאוגרפי כולל בקרה על מיקום כל מכולה ובקרה אוטומטית על מיקום גיאוגרפי של נקודת הפריקה</li>
+                    <li>התראה בהתאם לדרישת הלקוח</li>
+                    <li>מעקב מכולות בכל אתר בנייה ושיפוצים</li>
+                    <li>עדכון כמות פסולת למכולה</li>
+                </ul>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                גרסה: 5.0.4
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="(mylang.currentLang!='Heb')">
+
+
+        <ion-row>
+            <ion-col text-center><img src="assets/img/cyberGreenLogo.jpg"></ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col text-center>
+                <h1>Cyber Green Online Solutions Ltd </h1>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <b>Cyber Green</b> develops advanced information systems, including a comprehensive waste management system using advanced technological means. The systems enable an efficient interface in all aspects – At the customer level, the municipality
+                level, the landfill level and the operating companies’ level.
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <b>Cyber Green</b> also developed a volume measuring system for trucks and a geographical positioning system, which enables location detection, tracking waste containers and detecting dumping points. The company was established in 2014,
+                and the development process was carried out in cooperation with the Israel Innovation Authority.
+                <br/> The company has registered patents for the key development technologies.
+            </ion-col>
+        </ion-row>
+
+
+
+        <ion-row>
+            <ion-col text-center><img src="assets/img/EcoWaste_Logo.jpg" width="50%"></ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col text-center>
+                <h1>EcoWaste.NET Municipal </h1>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+
+                The software provides a friendly user experience and enables the tracking uniquely identified skips, from the moment they are placed, through their replacement and until they are dumping on a licensed waste site. EcoWaste.NET Municipal can:
+                <ul>
+                    <li>Create and manage a construction & renovation projects.</li>
+                    <li>Skip management at construction & renovation sites - including skip replacement.</li>
+                    <li>Geographic information including location of each skip, and geographical location of the dumping location.</li>
+                    <li>Alerts tailored to customer demand</li>
+                    <li>Project fulfillment & Billing for services rendered.</li>
+                </ul>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                • The system is available as a downloadable application for iPhone, Android and Tablets.
+            </ion-col>
+        </ion-row>
+
+
+        <ion-row>
+            <ion-col>
+                Version 5.0.4
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+
+
+</ion-content>

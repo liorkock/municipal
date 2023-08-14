@@ -1,0 +1,37 @@
+<ion-header [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+
+    <ion-toolbar>
+      
+      <ion-title >
+          {{mylang.HomePage.containers}}
+      </ion-title>
+  
+      <ion-buttons slot="start">
+        <ion-button (click)="CanelNoSave($event)"> {{mylang.General.cancelSearch}}</ion-button>
+      </ion-buttons>
+  
+      <!--<ion-buttons slot="start" *ngIf="userRole!='AAAA'">
+        <ion-button (click)="cancelSelected($event)"> {{mylang.General.cancelSelected}}      </ion-button>
+      </ion-buttons>-->
+  
+    </ion-toolbar>
+  </ion-header>
+  
+  
+  <ion-content [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+  
+    <ion-searchbar debounce='1000' (ionChange)="getItemsByFilter($event)" [(ngModel)]="myInput2"></ion-searchbar>
+    <ion-list inset>
+  
+      <ion-item *ngFor="let item of (items? items.slice(0,280): [])">
+        <ion-label>
+            {{ item.codeDesc}}          
+        </ion-label>
+        <ion-label slot="end" class="listBtnSmall" style="display:contents">
+            <ion-button expand="outline" item-right (click)="itemSelected($event,item)">{{mylang.General.select}}</ion-button>
+          </ion-label>
+  
+      </ion-item>
+    </ion-list>
+  
+  </ion-content>

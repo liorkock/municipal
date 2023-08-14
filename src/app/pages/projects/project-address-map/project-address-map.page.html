@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons>
+        <ion-button (click)="cancel($event)"> {{mylang.General.goBack}}</ion-button>
+      </ion-buttons>
+  
+    </ion-toolbar>
+  </ion-header>
+  
+  
+  <ion-content>
+  
+    <ion-list [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+      <ion-item>
+        <ion-input type="text" value="" [(ngModel)]="townAndAddress" placeholder="{{mylang.General.typeLocation}}">
+        </ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-button outline (click)="gotoLocation($event)">{{mylang.General.findLocation}}</ion-button>
+        <ion-button outline  (click)="closeForm($event)"
+          style="margin-right:15px">{{mylang.General.select}}</ion-button>
+      </ion-item>
+    </ion-list>
+  
+    <div id="map" style="min-width: 200px;min-height: 200px;"></div>
+    <div style="height: 100%;width: 100%" id="map_canvas"></div>
+  </ion-content>

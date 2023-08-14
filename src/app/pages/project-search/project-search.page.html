@@ -1,0 +1,82 @@
+<ion-header>
+
+    <ion-toolbar>
+      
+      <ion-title [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+          {{mylang.HomePage.projects }}
+      </ion-title>
+  
+      <ion-buttons slot="start">
+        <ion-button (click)="CanelNoSave($event)"> {{mylang.General.cancelSearch}}</ion-button>
+      </ion-buttons>
+      <ion-buttons slot="start">
+        <ion-label  >{{mylang.General.ShowAlsoNotActive}}</ion-label>
+        <ion-toggle  [(ngModel)]="filterShowArhive" (ionChange)="getItemsByFilter($event)" ></ion-toggle >
+      </ion-buttons>
+      <ion-buttons slot="end" *ngIf="linked_containerId==0">
+        <ion-button (click)="cancelSelected($event)"> {{mylang.General.cancelSelected}}      </ion-button>
+      </ion-buttons>
+
+      <ion-buttons slot="end" *ngIf="linked_containerId!=0&& module!='SupplierOrder'">
+        <ion-button (click)="createNewProject()"> {{mylang.General.new}}      </ion-button>
+      </ion-buttons>
+     <!-- <ion-buttons slot="end" *ngIf="module=='SupplierOrder'">
+        <ion-button (click)="createNewSupplierOrderProject($event)"> {{mylang.General.new}}      </ion-button>
+      </ion-buttons>
+      -->
+    </ion-toolbar>
+  </ion-header>
+  
+  
+  <ion-content [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+  
+    <ion-searchbar (ionChange)="getItemsByFilter($event)" debounce='1000' [(ngModel)]="myInput2"></ion-searchbar>
+<ion-item  *ngIf="items.length<1">
+
+    <ion-label mode="ios" >
+         <ion-text  mode="ios" >
+         {{mylang.General.NoData}} 
+        </ion-text>
+      </ion-label>
+ </ion-item>
+
+ <ion-list inset *ngIf="module=='SupplierOrder'">  
+  <ion-item button [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (items? items.slice(0,280): []);let even = even" (click)="itemSelected($event,item)">
+    <ion-label>
+      <h2>{{item.projectAddress}}</h2>
+      <p *ngIf="userRole=='Admin'||userRole=='Inspector'">{{item.movingCompanyName}}</p>
+      <p>{{item.startDate}}</p>
+      <p>{{item.clientName}}</p>     
+    </ion-label>   
+    <ion-label slot="end" >
+        <ion-button expand="outline" item-right (click)="itemSelected($event,item)">{{mylang.General.select}}</ion-button>
+    </ion-label>  
+  </ion-item>
+</ion-list>
+
+<ion-list inset *ngIf="linked_containerId==0">  
+  <ion-item  [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (items? items.slice(0,280): []);let even = even"  (click)="itemSelected($event,item)">
+        <ion-label>{{ item.codeDesc}}</ion-label>
+        <ion-label slot="end" class="listBtnSmall">
+            <ion-button expand="outline" item-right (click)="itemSelected($event,item)">{{mylang.General.select}}</ion-button>
+        </ion-label> 
+  </ion-item>
+</ion-list>
+
+    
+    <ion-list inset *ngIf="linked_containerId>0">  
+      <ion-item [ngClass]="even ? 'odd' : 'even'" *ngFor="let item of (items? items.slice(0,280): []);let even = even"  (click)="itemSelected($event,item)">
+        <ion-label>
+          <h2>{{item.projectAddress}}</h2>
+          <p *ngIf="userRole=='Admin'||userRole=='Inspector'">{{item.movingCompanyName}}</p>
+          <p>{{item.startDate}}</p>
+          <p>{{item.clientName}}</p>     
+        </ion-label>
+        
+        <ion-label slot="end" >
+            <ion-button expand="outline" item-right (click)="itemSelected($event,item)">{{mylang.General.Insert2Project}}</ion-button>
+        </ion-label>   
+      </ion-item>
+    </ion-list>
+  
+  </ion-content>

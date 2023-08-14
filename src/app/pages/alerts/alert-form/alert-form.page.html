@@ -1,0 +1,92 @@
+
+<ion-header [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">    
+   <ion-toolbar>  
+     <ion-title >
+        {{mylang.Alert.form}}
+      </ion-title>
+ 
+      <ion-buttons slot="start">
+            <ion-button   color="secondary"  (click)="save($event)"> <img width="24" height="24" src="assets/img/saveIcon.png" style="margin-right:6px;margin-left:5px">  {{mylang.General.save}}</ion-button>
+      </ion-buttons>
+
+      <ion-buttons slot="end">
+          <ion-button   (click)="cancel($event)"> {{mylang.General.goBack}}</ion-button>
+    </ion-buttons>
+   
+   </ion-toolbar>
+ </ion-header>
+ 
+ 
+ <ion-content padding [ngClass]="{'hebStyle': mylang.currentLang=='Heb'}">
+ <ion-list>
+   
+   <ion-item *ngIf="(userRole=='Admin'||userRole=='Inspector')" >
+     <ion-label color="primary">{{mylang.Project.movingCompanyTz}}</ion-label>
+     <ion-input type="text"   readonly="true" [(ngModel)]="DB.movingCompanyTz"></ion-input>
+   </ion-item>
+ 
+   <ion-item *ngIf="(userRole=='Admin'||userRole=='Inspector')" >
+     <ion-label color="primary">{{mylang.Container.movingCompanyName}}</ion-label>
+     <ion-input type="text" readonly="true" [(ngModel)]="DB.movingCompanyName"></ion-input>
+   </ion-item>
+ 
+   <ion-item>
+     <ion-label color="primary">{{mylang.Container.regNum}}</ion-label>
+     <ion-input type="text"  readonly="true" [(ngModel)]="DB.regNum"></ion-input>
+   </ion-item>
+ 
+  <ion-item>
+     <ion-label color="primary">{{mylang.Alert.alertTypeDesc}}</ion-label>
+     <ion-input type="text"  readonly="true" [(ngModel)]="DB.alertTypeDesc"></ion-input>
+   </ion-item>
+ 
+    <ion-item  *ngIf="(DB.alertTypeId==6)">
+     <ion-label color="primary">{{mylang.Alert.stoppingTime}}</ion-label>
+     <ion-input type="text"  readonly="true" [(ngModel)]="DB.stoppingTime"></ion-input>
+   </ion-item>
+ 
+ 
+      <ion-item  *ngIf="(DB.alertTypeId==4)">
+     <ion-label color="primary">{{mylang.Project.clientName}}</ion-label>
+     <ion-input type="text"  readonly="true" [(ngModel)]="DB.clientName"></ion-input>
+     </ion-item>
+     <ion-item  *ngIf="(DB.alertTypeId==4)">
+     <ion-label color="primary">{{mylang.Client.clientPhone}}</ion-label>
+     <ion-input type="text"  readonly="true" [(ngModel)]="DB.clientPhone"></ion-input>
+     </ion-item>
+     <ion-item  *ngIf="(DB.alertTypeId==4)">
+     <ion-label color="primary">{{mylang.Project.projectAddress}}</ion-label>
+     <ion-input type="text"  readonly="true" [(ngModel)]="DB.projectAddress"></ion-input>
+     </ion-item>
+ 
+ 
+   <ion-item>
+     <ion-label color="primary">{{mylang.Alert.alertDate}}</ion-label>
+     <ion-input type="text"  readonly="true" [(ngModel)]="DB.alertDate"></ion-input>
+   </ion-item>
+ 
+ <ion-item>
+       <ion-label color="primary">{{mylang.Alert.clearReasonDesc}}<b color="danger" required>*</b></ion-label>
+       <ion-select [(ngModel)]="DB.clearReasonId"  [compareWith]="compareWith" okText="{{mylang.General.select}}" cancelText={{mylang.General.cancel}} >
+        <ion-select-option *ngFor="let codeItem of AlertClearReasonList" value="{{codeItem.codeId}}" >{{codeItem.codeDesc}}</ion-select-option>
+       </ion-select>
+     </ion-item>
+ 
+  <ion-item *ngIf="(DB.cleardate!='')">
+     <ion-label color="primary">{{mylang.Alert.cleardate}}</ion-label>
+     <ion-input type="text"  readonly="true" [(ngModel)]="DB.cleardate"></ion-input>
+  </ion-item>
+ 
+ 
+ 
+ <ion-item>
+     <ion-label color="primary">{{mylang.Alert.remarks}}</ion-label>
+     <ion-textarea type="text"  [(ngModel)]="DB.remarks"></ion-textarea>
+   </ion-item>
+ 
+ </ion-list>
+ 
+ 
+ </ion-content>
+ 
+ 
