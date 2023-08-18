@@ -14,7 +14,7 @@ import { LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 
-//import { OneSignal } from '@ionic-native/onesignal/ngx';//disableV7
+import { OneSignal } from '@awesome-cordova-plugins/onesignal/ngx';//disableV7
 
 
 @Component({
@@ -48,7 +48,7 @@ export class HomePage {
   public CouncilsList;
   constructor(private authenticationService:AuthenticationService,private github: GitHubService,public alertController: AlertController,
                 private router: Router,private storage: Storage
-                //,private oneSignal: OneSignal//disableV7
+                ,private oneSignal: OneSignal//disableV7
                 ,private platform: Platform,public loadingController: LoadingController)
   {
     this.storage.create();
@@ -135,7 +135,7 @@ export class HomePage {
    
   async initOneSignal() {    
     //disableV7
-    /*  
+    
     try{
 
       
@@ -198,7 +198,6 @@ export class HomePage {
     catch(err) {   
        this.displayErrorMsg(" initOneSignal "+err) ;               
     }
-    */
 }
 
 

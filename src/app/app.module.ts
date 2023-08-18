@@ -48,7 +48,8 @@ import { HttpClient, HttpClientModule, HttpHandler, HttpParams, HttpHeaders } fr
 
 
 //toEnable
-//import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { OneSignal } from '@awesome-cordova-plugins/onesignal/ngx';
+
 //,IonicStorageModule.forRoot()
 
 @NgModule({
@@ -61,7 +62,8 @@ import { HttpClient, HttpClientModule, HttpHandler, HttpParams, HttpHeaders } fr
     GitHubService,
     AuthenticationService,
     LaunchNavigator,
-    Storage
+    Storage,
+    OneSignal
     ],
   bootstrap: [AppComponent]
 })

@@ -676,6 +676,8 @@ au_itemSelected(e, item){
 
 
   compareWithFn = (o1, o2) => {
+    if(o1==null || o2==null)
+      return false;
     return o1.toString()==o2.toString()? true:false;    
     //return o1 && o2 ? o1.codeId === o2.codeId : o1 === o2;    
   }
